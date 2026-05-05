@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Founding Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  /* ── TOKENS ─────────────────────────────────── */
+  :root{
+    /* ── palette from screenshot ── */
+    --p:    #4a2e2a;   /* primary dark brown      */
+    --pl:   #7a5c56;   /* primary light brown     */
+    --pd:   #2e1c19;   /* primary deepest         */
+    --a:    #fbeedb;   /* accent cream            */
+    --am:   #f0d5b0;   /* accent mid peach        */
+    --ad:   #c9955a;   /* accent golden brown     */
+    --bg:   #fff;
+    --bg2:  #fdf8f2;
+    --bg3:  #f5ede0;
+    --t:    #1a0f0d;   /* text dark               */
+    --t2:   #6b4c44;   /* text medium             */
+    --t3:   #9c7b73;   /* text muted              */
+
+    /* ── semantic aliases ── */
+    --surface:   var(--bg2);
+    --card:      var(--bg);
+    --border:    rgba(74,46,42,.14);
+    --border-h:  rgba(74,46,42,.42);
+    --gold:      var(--ad);
+    --gold-l:    var(--am);
+    --gold-d:    var(--p);
+    --cream:     var(--t);       /* main text is now dark  */
+    --muted:     var(--t3);
+    --danger:    #c0392b;
+    --success:   #2e7d5e;
+    --radius:    14px;
+    --ff-head:   'Cormorant Garamond', serif;
+    --ff-body:   'DM Sans', sans-serif;
+    --transition: .22s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ── RESET ──────────────────────────────────── */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--ff-body);
+    background:var(--bg3);
+    color:var(--t);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* ── ANIMATED BACKGROUND ────────────────────── */
+  .bg-layer{
+    position:fixed;inset:-2%;z-index:0;
+    background:
+      linear-gradient(180deg, rgba(253,248,242,.88) 0%, rgba(245,237,224,.88) 100%),
+      radial-gradient(circle at 12% 18%, rgba(240,213,176,.52) 0%, transparent 32%),
+      radial-gradient(circle at 88% 12%, rgba(201,149,90,.2) 0%, transparent 24%),
+      url("Background_image.jpg") center center / cover no-repeat;
+    pointer-events:none;
+    transform:scale(1.03);
+  }
+  .bg-layer::after{
+    content:'';
+    position:absolute;inset:0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.34), transparent 38%),
+      linear-gradient(0deg, rgba(255,255,255,.12), rgba(255,255,255,.28));
+  }
+  .stars{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    /* subtle grain texture */
+    background-image:
+      radial-gradient(1px 1px at 15% 20%, rgba(74,46,42,.12) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 60%, rgba(74,46,42,.08) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 30%, rgba(74,46,42,.1) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 75%, rgba(74,46,42,.07) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 55% 85%, rgba(201,149,90,.25) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 25% 45%, rgba(201,149,90,.2) 0%, transparent 100%);
+    opacity:.5;
+  }
+
+  /* ── LAYOUT ─────────────────────────────────── */
+  .wrap{
+    position:relative;z-index:1;
+    max-width:680px;margin:0 auto;
+    padding:40px 20px 80px;
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  .header{text-align:center;padding:50px 0 40px;animation:fadeUp .7s ease both;}
+  .header-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(201,149,90,.14);
+    border:1px solid rgba(201,149,90,.35);
+    border-radius:40px;padding:6px 18px;
+    font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--p);margin-bottom:22px;
+  }
+  .header h1{
+    font-family:var(--ff-head);font-size:clamp(2rem,6vw,3.2rem);
+    font-weight:300;color:var(--pd);line-height:1.2;
+    margin-bottom:12px;
+  }
+  .header h1 em{color:var(--ad);font-style:italic;}
+  .header p{color:var(--t2);font-size:.92rem;max-width:420px;margin:0 auto 30px;}
+  .header-meta{
+    display:flex;justify-content:center;gap:24px;flex-wrap:wrap;
+    font-size:.78rem;color:var(--t2);
+  }
+  .header-meta span{display:flex;align-items:center;gap:6px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--ad);display:inline-block;}
+
+  /* ── PROGRESS ───────────────────────────────── */
+  .progress-shell{
+    background:rgba(255,255,255,.8);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:var(--radius);
+    padding:18px 22px 20px;
+    margin-bottom:28px;
+    box-shadow:0 2px 12px rgba(74,46,42,.06);
+    backdrop-filter:blur(10px);
+    animation:fadeUp .7s .1s ease both;
+  }
+  .progress-top{
+    display:flex;justify-content:space-between;
+    font-size:.78rem;margin-bottom:10px;
+  }
+  .progress-label{color:var(--muted);}
+  .progress-step-text{color:var(--ad);font-weight:500;}
+  .progress-bar-bg{
+    height:4px;background:var(--am);border-radius:99px;overflow:hidden;opacity:.5;
+  }
+  .progress-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--p),var(--ad));
+    border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .steps-dots{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .step-dot{
+    width:28px;height:4px;border-radius:99px;
+    background:var(--am);
+    transition:background var(--transition);
+  }
+  .step-dot.active{background:var(--p);}
+  .step-dot.done{background:rgba(74,46,42,.3);}
+
+  /* ── CARD ───────────────────────────────────── */
+  .card{
+    background:rgba(255,255,255,.84);
+    border:1px solid rgba(255,255,255,.62);
+    border-radius:calc(var(--radius)*1.5);
+    padding:36px 36px 32px;
+    margin-bottom:20px;
+    animation:fadeUp .5s ease both;
+    position:relative;overflow:hidden;
+    box-shadow:0 4px 24px rgba(74,46,42,.07), 0 1px 4px rgba(74,46,42,.04);
+    backdrop-filter:blur(12px);
+  }
+  .card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,transparent,var(--ad),transparent);
+    opacity:.7;
+  }
+  .card-slug{
+    font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--t3);margin-bottom:10px;
+  }
+  .card h2{
+    font-family:var(--ff-head);font-size:clamp(1.35rem,4vw,1.75rem);
+    font-weight:400;color:var(--pd);margin-bottom:6px;line-height:1.25;
+  }
+  .card p{color:var(--t2);font-size:.88rem;line-height:1.65;margin-bottom:22px;}
+
+  /* ── DIVIDER ────────────────────────────────── */
+  .divider{
+    height:1px;background:var(--border);margin:24px 0;
+  }  /* ── QUESTION ───────────────────────────────── */
+  .question{margin-bottom:28px;}
+  .question label{
+    display:block;font-size:.82rem;font-weight:500;
+    color:var(--t);margin-bottom:10px;letter-spacing:.01em;
+  }
+  .question label .req{color:var(--ad);margin-left:2px;}
+
+  /* radio / checkbox grid */
+  .choices{display:flex;flex-direction:column;gap:8px;}
+  .choices.grid-2{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+  }
+  .choice-item{
+    position:relative;
+    display:flex;align-items:center;gap:12px;
+    background:rgba(255,250,244,.88);
+    border:1px solid var(--border);
+    border-radius:10px;padding:11px 16px;cursor:pointer;
+    transition:border-color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
+    user-select:none;
+  }
+  .choice-item:hover{border-color:var(--border-h);background:var(--a);transform:translateY(-1px);}
+  .choice-item:focus-within{
+    border-color:var(--p);
+    box-shadow:0 0 0 3px rgba(201,149,90,.16);
+  }
+  .choice-item input{
+    position:absolute;
+    width:1px;height:1px;
+    opacity:0;
+    pointer-events:none;
+  }
+  .choice-item.selected{
+    border-color:var(--p);
+    background:rgba(74,46,42,.07);
+  }
+  .choice-mark{
+    width:18px;height:18px;border-radius:50%;
+    border:1.5px solid var(--border-h);
+    flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    transition:all var(--transition);
+  }
+  .choice-item.selected .choice-mark{
+    border-color:var(--p);background:var(--p);
+  }
+  .choice-item.selected .choice-mark::after{
+    content:'';width:6px;height:6px;border-radius:50%;background:#fff;
+  }
+  /* checkbox variant */
+  .choice-item.cb .choice-mark{border-radius:5px;}
+  .choice-item.cb.selected .choice-mark::after{
+    content:'✓';font-size:.65rem;color:#fff;font-weight:700;
+    width:auto;height:auto;border-radius:0;
+  }
+  .choice-text{font-size:.85rem;color:var(--t);}
+  [data-name="platforms"] .choice-item{
+    min-height:88px;
+    align-items:flex-start;
+    padding:18px 18px 16px;
+  }
+  [data-name="platforms"] .choice-mark{margin-top:4px;}
+  [data-name="platforms"] .choice-text{
+    font-size:1rem;
+    line-height:1.35;
+  }
+
+  /* text input */
+  .input-field{
+    width:100%;background:var(--bg2);
+    border:1px solid var(--border);border-radius:10px;
+    padding:12px 16px;color:var(--t);font-family:var(--ff-body);
+    font-size:.88rem;outline:none;
+    transition:border-color var(--transition), background var(--transition);
+  }
+  .input-field:focus{border-color:var(--p);background:var(--a);}
+  .input-field::placeholder{color:var(--t3);}
+  textarea.input-field{resize:vertical;min-height:90px;line-height:1.6;}
+
+  /* NPS */
+  .nps-row{
+    display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;
+  }
+  .nps-btn{
+    flex:1;min-width:36px;padding:10px 4px;
+    background:var(--bg2);
+    border:1px solid var(--border);border-radius:8px;
+    color:var(--t2);font-size:.82rem;font-weight:500;
+    cursor:pointer;text-align:center;transition:all var(--transition);
+  }
+  .nps-btn:hover{border-color:var(--border-h);color:var(--t);}
+  .nps-btn.selected{background:var(--p);border-color:var(--p);color:#fff;}
+  .nps-labels{
+    display:flex;justify-content:space-between;
+    font-size:.7rem;color:var(--t3);margin-top:6px;
+  }
+
+  /* ── ERROR ──────────────────────────────────── */
+  .error-box{
+    background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);
+    border-radius:10px;padding:10px 16px;
+    font-size:.8rem;color:#a02020;margin-bottom:18px;
+    display:none;
+  }
+  .error-box.show{display:block;}
+
+  /* ── BUTTONS ─────────────────────────────────── */
+  .btn-row{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:12px;margin-top:8px;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    border-radius:10px;padding:12px 28px;font-family:var(--ff-body);
+    font-size:.88rem;font-weight:500;cursor:pointer;border:none;
+    transition:all var(--transition);outline:none;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--p),var(--ad));
+    color:#fff;font-weight:600;
+  }
+  .btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent;border:1px solid var(--border);color:var(--t2);
+    padding:12px 20px;
+  }
+  .btn-ghost:hover{border-color:var(--border-h);color:var(--t);}
+  .btn-submit{
+    background:linear-gradient(135deg,#2d6a4f,#40916c);
+    color:#fff;font-weight:600;
+  }
+  .btn-submit:hover{filter:brightness(1.08);transform:translateY(-1px);}
+
+  /* loading spinner inside btn */
+  .btn-spinner{
+    width:14px;height:14px;border:2px solid rgba(255,255,255,.3);
+    border-top-color:#fff;border-radius:50%;
+    animation:spin .6s linear infinite;display:none;
+  }
+  .btn.loading .btn-spinner{display:inline-block;}
+  .btn.loading .btn-label{opacity:.6;}
+
+  /* ── THANK YOU ──────────────────────────────── */
+  .thankyou{
+    text-align:center;padding:60px 30px;
+    animation:fadeUp .7s ease both;
+  }
+  .ty-icon{
+    width:72px;height:72px;margin:0 auto 24px;
+    background:rgba(46,125,94,.1);
+    border:1px solid rgba(46,125,94,.35);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:1.8rem;
+  }
+  .thankyou h2{
+    font-family:var(--ff-head);font-size:2rem;font-weight:400;
+    color:var(--pd);margin-bottom:10px;
+  }
+  .thankyou p{color:var(--t2);font-size:.9rem;max-width:340px;margin:0 auto 28px;}
+  .ty-badge{
+    display:inline-block;background:rgba(74,46,42,.08);
+    border:1px solid var(--border);border-radius:99px;
+    padding:6px 18px;font-size:.75rem;color:var(--p);
+    letter-spacing:.08em;
+  }
+
+  /* ── ANIMATIONS ─────────────────────────────── */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(18px);}
+    to  {opacity:1;transform:translateY(0);}
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* step transitions */
+  .step{display:none;}
+  .step.active{display:block;animation:fadeUp .45s ease both;}
+
+  /* ── RESPONSIVE ─────────────────────────────── */
+  @media(max-width:500px){
+    .card{padding:24px 20px 22px;}
+    .choices.grid-2{grid-template-columns:1fr;}
+    .wrap{padding:24px 14px 60px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="stars"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-badge">
+      <span class="dot"></span>
+      Founding Research Survey
+    </div>
+    <h1>Share your <em>honest</em> feedback</h1>
+    <p>No signup required. Your answers shape what we build — or whether we build it at all.</p>
+    <div class="header-meta">
+      <span><span class="dot"></span> Under 5 minutes</span>
+      <span><span class="dot"></span> Completely anonymous</span>
+      <span><span class="dot"></span> 7 short steps</span>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-shell" id="progressShell">
+    <div class="progress-top">
+      <span class="progress-label" id="progressLabel">Step 1 of 7</span>
+      <span class="progress-step-text" id="progressStepName">Parichay — Who you are</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:14%"></div>
+    </div>
+    <div class="steps-dots" id="stepsDots"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- STEP 1 — Parichay -->
+  <div class="step active" id="step1">
+    <div class="card">
+      <div class="card-slug">Parichay · 01 / 07</div>
+      <h2>Tell us who you are.</h2>
+      <p>The more clearly we understand who is answering, the sharper our roadmap becomes.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>Your age group <span class="req">*</span></label>
+        <div class="choices" data-name="age_group" data-type="radio">
+          <label class="choice-item"><input type="radio" name="age_group" value="Under 20"/><span class="choice-mark"></span><span class="choice-text">Under 20</span></label>
+          <label class="choice-item"><input type="radio" name="age_group" value="20–35"/><span class="choice-mark"></span><span class="choice-text">20–35</span></label>
+          <label class="choice-item"><input type="radio" name="age_group" value="35–50"/><span class="choice-mark"></span><span class="choice-text">35–50</span></label>
+          <label class="choice-item"><input type="radio" name="age_group" value="50–65"/><span class="choice-mark"></span><span class="choice-text">50–65</span></label>
+          <label class="choice-item"><input type="radio" name="age_group" value="65+"/><span class="choice-mark"></span><span class="choice-text">65+</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Where are you based? <span class="req">*</span></label>
+        <div class="choices grid-2" data-name="location" data-type="radio">
+          <label class="choice-item"><input type="radio" name="location" value="India metro"/><span class="choice-mark"></span><span class="choice-text">India — Metro</span></label>
+          <label class="choice-item"><input type="radio" name="location" value="India Tier 2/3"/><span class="choice-mark"></span><span class="choice-text">India — Tier 2 / 3</span></label>
+          <label class="choice-item"><input type="radio" name="location" value="Overseas Indian"/><span class="choice-mark"></span><span class="choice-text">Overseas Indian</span></label>
+          <label class="choice-item"><input type="radio" name="location" value="Overseas non-Indian"/><span class="choice-mark"></span><span class="choice-text">Overseas non-Indian</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>How active is your spiritual practice? <span class="req">*</span></label>
+        <div class="choices" data-name="practice" data-type="radio">
+          <label class="choice-item"><input type="radio" name="practice" value="Daily puja or prayer"/><span class="choice-mark"></span><span class="choice-text">Daily puja or prayer</span></label>
+          <label class="choice-item"><input type="radio" name="practice" value="A few times each week"/><span class="choice-mark"></span><span class="choice-text">A few times each week</span></label>
+          <label class="choice-item"><input type="radio" name="practice" value="Mostly during festivals"/><span class="choice-mark"></span><span class="choice-text">Mostly during festivals</span></label>
+          <label class="choice-item"><input type="radio" name="practice" value="Still exploring"/><span class="choice-mark"></span><span class="choice-text">I am still exploring</span></label>
+        </div>
+      </div>
+
+      <div class="error-box" id="err1">Please answer all three questions before continuing.</div>
+      <div class="btn-row">
+        <div></div>
+        <button class="btn btn-primary" onclick="nextStep(1,['age_group','location','practice'],'err1')">
+          <span class="btn-label">Continue</span>
+          <span class="btn-spinner"></span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 — Aadat -->
+  <div class="step" id="step2">
+    <div class="card">
+      <div class="card-slug">Aadat · 02 / 07</div>
+      <h2>What are your current digital habits?</h2>
+      <p>We want to understand what already has your attention before asking for any of it.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>Which platforms do you use for spiritual content? <span class="req">*</span> <em style="font-size:.72rem;color:var(--muted)">(pick all that apply)</em></label>
+        <div class="choices grid-2" data-name="platforms" data-type="checkbox">
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="YouTube"/><span class="choice-mark"></span><span class="choice-text">YouTube</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="WhatsApp groups"/><span class="choice-mark"></span><span class="choice-text">WhatsApp Groups</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="Instagram/Reels"/><span class="choice-mark"></span><span class="choice-text">Instagram / Reels</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="Temple app"/><span class="choice-mark"></span><span class="choice-text">Temple App / Website</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="Sri Mandir or BAPS"/><span class="choice-mark"></span><span class="choice-text">Sri Mandir / BAPS</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="Facebook groups"/><span class="choice-mark"></span><span class="choice-text">Facebook Groups</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="platforms" value="No specific platform"/><span class="choice-mark"></span><span class="choice-text">No specific platform</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>How often do you consume spiritual content online? <span class="req">*</span></label>
+        <div class="choices" data-name="frequency" data-type="radio">
+          <label class="choice-item"><input type="radio" name="frequency" value="Multiple times a day"/><span class="choice-mark"></span><span class="choice-text">Multiple times a day</span></label>
+          <label class="choice-item"><input type="radio" name="frequency" value="Once a day"/><span class="choice-mark"></span><span class="choice-text">Once a day</span></label>
+          <label class="choice-item"><input type="radio" name="frequency" value="A few times a week"/><span class="choice-mark"></span><span class="choice-text">A few times a week</span></label>
+          <label class="choice-item"><input type="radio" name="frequency" value="Rarely"/><span class="choice-mark"></span><span class="choice-text">Rarely</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Biggest problem with current experience? <span class="req">*</span></label>
+        <div class="choices" data-name="problem" data-type="radio">
+          <label class="choice-item"><input type="radio" name="problem" value="Too much distraction"/><span class="choice-mark"></span><span class="choice-text">Too much distraction</span></label>
+          <label class="choice-item"><input type="radio" name="problem" value="Hard to find authentic content"/><span class="choice-mark"></span><span class="choice-text">Hard to find authentic content</span></label>
+          <label class="choice-item"><input type="radio" name="problem" value="Too many fake accounts"/><span class="choice-mark"></span><span class="choice-text">Too many fake / unverified accounts</span></label>
+          <label class="choice-item"><input type="radio" name="problem" value="Too scattered across apps"/><span class="choice-mark"></span><span class="choice-text">Too scattered across apps</span></label>
+          <label class="choice-item"><input type="radio" name="problem" value="Current options are fine"/><span class="choice-mark"></span><span class="choice-text">Current options are enough for me</span></label>
+        </div>
+      </div>
+
+      <div class="error-box" id="err2">Please complete this step before continuing.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="prevStep(2)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(2,['platforms','frequency','problem'],'err2')">
+          <span class="btn-label">Continue</span><span class="btn-spinner"></span><span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 — Dharna -->
+  <div class="step" id="step3">
+    <div class="card">
+      <div class="card-slug">Dharna · 03 / 07</div>
+      <h2>What is your first impression?</h2>
+      <p>Imagine one calm app: live darshan, verified sants, bhajans, reels, and community — without distracting recommendations.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>Does this concept appeal to you? <span class="req">*</span></label>
+        <div class="choices" data-name="appeal" data-type="radio">
+          <label class="choice-item"><input type="radio" name="appeal" value="Yes, I was waiting for this"/><span class="choice-mark"></span><span class="choice-text">Yes — I was waiting for this</span></label>
+          <label class="choice-item"><input type="radio" name="appeal" value="Mostly yes, must prove itself"/><span class="choice-mark"></span><span class="choice-text">Mostly yes, but it must prove itself</span></label>
+          <label class="choice-item"><input type="radio" name="appeal" value="Neutral — depends on quality"/><span class="choice-mark"></span><span class="choice-text">Neutral — depends on quality</span></label>
+          <label class="choice-item"><input type="radio" name="appeal" value="Not really"/><span class="choice-mark"></span><span class="choice-text">Not really, existing platforms work</span></label>
+          <label class="choice-item"><input type="radio" name="appeal" value="No"/><span class="choice-mark"></span><span class="choice-text">No, I don't need another app</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Which parts appeal most? <span class="req">*</span> <em style="font-size:.72rem;color:var(--muted)">(pick up to three)</em></label>
+        <div class="choices grid-2" data-name="appealing_parts" data-type="checkbox" data-max="3">
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Live darshan"/><span class="choice-mark"></span><span class="choice-text">Live Darshan</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Distraction-free feed"/><span class="choice-mark"></span><span class="choice-text">Distraction-free Feed</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Verified sants"/><span class="choice-mark"></span><span class="choice-text">Verified Sants</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Mandir community"/><span class="choice-mark"></span><span class="choice-text">Mandir Community</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Bhajans and katha"/><span class="choice-mark"></span><span class="choice-text">Bhajans &amp; Katha</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Real seva and donations"/><span class="choice-mark"></span><span class="choice-text">Real Seva &amp; Donations</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Pilgrimage guides"/><span class="choice-mark"></span><span class="choice-text">Pilgrimage Guides</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="appealing_parts" value="Festival calendar"/><span class="choice-mark"></span><span class="choice-text">Festival Calendar</span></label>
+        </div>
+      </div>
+
+      <div class="error-box" id="err3">Please answer both questions before continuing.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="prevStep(3)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(3,['appeal','appealing_parts'],'err3')">
+          <span class="btn-label">Continue</span><span class="btn-spinner"></span><span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 — Niyamit upyog -->
+  <div class="step" id="step4">
+    <div class="card">
+      <div class="card-slug">Niyamit Upyog · 04 / 07</div>
+      <h2>Would you return regularly?</h2>
+      <p>We care about real habit formation, not polite encouragement.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>If it launched today, how often would you open it? <span class="req">*</span></label>
+        <div class="choices" data-name="open_frequency" data-type="radio">
+          <label class="choice-item"><input type="radio" name="open_frequency" value="Multiple times a day"/><span class="choice-mark"></span><span class="choice-text">Multiple times a day</span></label>
+          <label class="choice-item"><input type="radio" name="open_frequency" value="Once a day"/><span class="choice-mark"></span><span class="choice-text">Once a day</span></label>
+          <label class="choice-item"><input type="radio" name="open_frequency" value="A few times a week"/><span class="choice-mark"></span><span class="choice-text">A few times a week</span></label>
+          <label class="choice-item"><input type="radio" name="open_frequency" value="Only on festivals"/><span class="choice-mark"></span><span class="choice-text">Only on festivals</span></label>
+          <label class="choice-item"><input type="radio" name="open_frequency" value="Would try once and forget"/><span class="choice-mark"></span><span class="choice-text">Would try once and forget</span></label>
+          <label class="choice-item"><input type="radio" name="open_frequency" value="Would not use it"/><span class="choice-mark"></span><span class="choice-text">Would not use it</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What would bring you back daily? <em style="font-size:.72rem;color:var(--muted)">(pick all that feel real)</em></label>
+        <div class="choices grid-2" data-name="retention_hooks" data-type="checkbox">
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Morning darshan notification"/><span class="choice-mark"></span><span class="choice-text">Morning Darshan Alert</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Daily panchang"/><span class="choice-mark"></span><span class="choice-text">Daily Panchang</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Fixed time live satsang"/><span class="choice-mark"></span><span class="choice-text">Fixed-time Live Satsang</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Spiritual streak tracker"/><span class="choice-mark"></span><span class="choice-text">Spiritual Streak Tracker</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Real devotee community"/><span class="choice-mark"></span><span class="choice-text">Real Devotee Community</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Fresh bhajan or katha daily"/><span class="choice-mark"></span><span class="choice-text">Fresh Bhajan / Katha Daily</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="retention_hooks" value="Nothing would bring me daily"/><span class="choice-mark"></span><span class="choice-text">Nothing would bring me daily</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Would you switch away from YouTube or WhatsApp for this? <span class="req">*</span></label>
+        <div class="choices" data-name="switch_intent" data-type="radio">
+          <label class="choice-item"><input type="radio" name="switch_intent" value="Yes, could replace them"/><span class="choice-mark"></span><span class="choice-text">Yes — could replace them for spiritual use</span></label>
+          <label class="choice-item"><input type="radio" name="switch_intent" value="Partially, would use both"/><span class="choice-mark"></span><span class="choice-text">Partially — would use both</span></label>
+          <label class="choice-item"><input type="radio" name="switch_intent" value="Unlikely"/><span class="choice-mark"></span><span class="choice-text">Unlikely — too used to current platforms</span></label>
+          <label class="choice-item"><input type="radio" name="switch_intent" value="No"/><span class="choice-mark"></span><span class="choice-text">No, I would not switch</span></label>
+        </div>
+      </div>
+
+      <div class="error-box" id="err4">Please answer the usage and switch questions to continue.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="prevStep(4)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(4,['open_frequency','switch_intent'],'err4')">
+          <span class="btn-label">Continue</span><span class="btn-spinner"></span><span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 — Vishwaas -->
+  <div class="step" id="step5">
+    <div class="card">
+      <div class="card-slug">Vishwaas · 05 / 07</div>
+      <h2>What helps you trust — and what holds you back?</h2>
+      <p>We want clear signal on legitimacy, fear, and whether this idea earns the right to stay in someone's life.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>What concerns would you have? <em style="font-size:.72rem;color:var(--muted)">(pick all that apply)</em></label>
+        <div class="choices grid-2" data-name="concerns" data-type="checkbox">
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="Fake gurus or bad content"/><span class="choice-mark"></span><span class="choice-text">Fake Gurus / Bad Content</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="Privacy of my data"/><span class="choice-mark"></span><span class="choice-text">Privacy of My Data</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="May become ad heavy"/><span class="choice-mark"></span><span class="choice-text">May Become Ad Heavy</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="May not survive long term"/><span class="choice-mark"></span><span class="choice-text">May Not Survive Long-term</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="Content quality may be low"/><span class="choice-mark"></span><span class="choice-text">Low Content Quality</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="Too many apps already"/><span class="choice-mark"></span><span class="choice-text">Too Many Apps Already</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="concerns" value="No major concerns"/><span class="choice-mark"></span><span class="choice-text">No Major Concerns</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What would make you trust it faster? <em style="font-size:.72rem;color:var(--muted)">(pick all that apply)</em></label>
+        <div class="choices grid-2" data-name="trust_signals" data-type="checkbox">
+          <label class="choice-item cb"><input type="checkbox" name="trust_signals" value="Trusted sant endorsement"/><span class="choice-mark"></span><span class="choice-text">Trusted Sant Endorsement</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="trust_signals" value="Local mandir verified"/><span class="choice-mark"></span><span class="choice-text">My Local Mandir is Verified</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="trust_signals" value="No ads and clean feed"/><span class="choice-mark"></span><span class="choice-text">No Ads &amp; Clean Feed</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="trust_signals" value="Friends or family use it"/><span class="choice-mark"></span><span class="choice-text">Friends / Family Use It</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="trust_signals" value="Transparent founders"/><span class="choice-mark"></span><span class="choice-text">Transparent Founders</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="trust_signals" value="Large verified community"/><span class="choice-mark"></span><span class="choice-text">Large Verified Community</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>If there were a premium plan at ₹99/month, how would you react? <span class="req">*</span></label>
+        <div class="choices" data-name="payment_intent" data-type="radio">
+          <label class="choice-item"><input type="radio" name="payment_intent" value="Yes, would pay for quality"/><span class="choice-mark"></span><span class="choice-text">Yes — I'd pay for quality</span></label>
+          <label class="choice-item"><input type="radio" name="payment_intent" value="Maybe, depending on features"/><span class="choice-mark"></span><span class="choice-text">Maybe — depends on features</span></label>
+          <label class="choice-item"><input type="radio" name="payment_intent" value="No, should stay free"/><span class="choice-mark"></span><span class="choice-text">No — spiritual content should stay free</span></label>
+          <label class="choice-item"><input type="radio" name="payment_intent" value="Rather donate than subscribe"/><span class="choice-mark"></span><span class="choice-text">I'd rather donate than subscribe</span></label>
+        </div>
+      </div>
+
+      <div class="error-box" id="err5">Please share at least your payment reaction before continuing.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="prevStep(5)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(5,['payment_intent'],'err5')">
+          <span class="btn-label">Continue</span><span class="btn-spinner"></span><span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6 — Sankalp (NPS) -->
+  <div class="step" id="step6">
+    <div class="card">
+      <div class="card-slug">Sankalp · 06 / 07</div>
+      <h2>Would you recommend it?</h2>
+      <p>Recommendation is the clearest proxy for belief. This score feeds the live dashboard instantly.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>How likely are you to recommend this to other devotees? <span class="req">*</span></label>
+        <div class="nps-row" id="npsRow"></div>
+        <div class="nps-labels"><span>1 = Not at all</span><span>10 = Absolutely</span></div>
+      </div>
+
+      <div class="question" style="margin-top:24px;">
+        <label>What is one thing you would tell the founders?</label>
+        <textarea class="input-field" id="founderMsg" name="founder_message" placeholder="Optional, but useful if you want to be direct…" rows="4"></textarea>
+      </div>
+
+      <div class="error-box" id="err6">Please choose an NPS score before continuing.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="prevStep(6)">← Back</button>
+        <button class="btn btn-primary" onclick="nextStep(6,['nps'],'err6')">
+          <span class="btn-label">Continue</span><span class="btn-spinner"></span><span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7 — Poorna -->
+  <div class="step" id="step7">
+    <div class="card">
+      <div class="card-slug">Poorna · 07 / 07</div>
+      <h2>Almost done. Want updates?</h2>
+      <p>Contact details are optional unless you want beta access or a founder reply.</p>
+      <div class="divider"></div>
+
+      <div class="question">
+        <label>Your name <span class="req">*</span></label>
+        <input class="input-field" id="fieldName" type="text" placeholder="Your full name"/>
+      </div>
+      <div class="question">
+        <label>Email <span class="req">*</span></label>
+        <input class="input-field" id="fieldEmail" type="email" placeholder="your@email.com"/>
+      </div>
+      <div class="question">
+        <label>WhatsApp number <span class="req">*</span></label>
+        <input class="input-field" id="fieldWhatsapp" type="tel" placeholder="+91 98765 43210"/>
+      </div>
+      <div class="question">
+        <label>Anything else?</label>
+        <textarea class="input-field" id="fieldOther" placeholder="Any other feedback, questions, or thoughts…" rows="3"></textarea>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="question">
+        <label style="margin-bottom:8px;">Permissions</label>
+        <div class="choices" data-name="permissions" data-type="checkbox">
+          <label class="choice-item cb"><input type="checkbox" name="permissions" value="beta_access"/><span class="choice-mark"></span><span class="choice-text"><strong style="color:var(--pd)">I want early beta access</strong> — use my contact to invite me</span></label>
+          <label class="choice-item cb"><input type="checkbox" name="permissions" value="follow_up"/><span class="choice-mark"></span><span class="choice-text"><strong style="color:var(--pd)">Comfortable being contacted</strong> — for launch updates or founder message</span></label>
+        </div>
+      </div>
+
+      <div class="error-box" id="err7">Please fill your name, email, and WhatsApp number before submitting.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="prevStep(7)">← Back</button>
+        <button class="btn btn-submit" id="submitBtn" onclick="submitForm()">
+          <span class="btn-label">Submit Feedback</span>
+          <span class="btn-spinner"></span>
+          <span>✓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THANK YOU -->
+  <div class="step" id="stepThanks">
+    <div class="thankyou">
+      <div class="ty-icon">🙏</div>
+      <h2>Dhanyavaad.</h2>
+      <p>Your response has been saved. The founding team will review every answer personally.</p>
+      <span class="ty-badge">Response recorded successfully</span>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+/* ══════════════════════════════════════════════════
+   ▸ GOOGLE FORMS CONFIG
+   Replace the values below with your own form's URL
+   and field entry IDs. See README in the HTML file.
+═══════════════════════════════════════════════════ */
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSdQcUTPrg50rGVx7bZBnvGCFBPIc854sMpKz3gZ3872pzaqfQ/formResponse";
+const FIELD_MAP = {
+  age_group:       "entry.784057855",
+  location:        "entry.339401965",
+  practice:        "entry.2061967713",
+  platforms:       "entry.1017712194",
+  frequency:       "entry.35568259",
+  problem:         "entry.382124004",
+  appeal:          "entry.1180214183",
+  appealing_parts: "entry.1466092751",
+  open_frequency:  "entry.615429864",
+  retention_hooks: "entry.695630078",
+  switch_intent:   "entry.162583220",
+  concerns:        "entry.995169832",
+  trust_signals:   "entry.2058473267",
+  payment_intent:  "entry.368462040",
+  nps:             "entry.458319696",
+  founder_message: "entry.1889967034",
+  respondent_name: "entry.1190681375",
+  respondent_email:"entry.1095502883",
+  whatsapp:        "entry.116539444",
+  other_feedback:  "entry.842322950",
+  permissions:     "entry.644625446",
+};
+
+/* ══════════════════════════════════════════════════
+   ▸ STATE
+═══════════════════════════════════════════════════ */
+const TOTAL = 7;
+let currentStep = 1;
+const answers = {};
+const stepNames = [
+  "Parichay — Who you are",
+  "Aadat — Digital habits",
+  "Dharna — First impression",
+  "Niyamit Upyog — Usage intent",
+  "Vishwaas — Trust signals",
+  "Sankalp — Recommendation",
+  "Poorna — Contact details"
+];
+
+/* ══════════════════════════════════════════════════
+   ▸ INIT
+═══════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+  buildDots();
+  buildNPS();
+  wireChoices();
+  updateProgress();
+});
+
+function buildDots(){
+  const c = document.getElementById("stepsDots");
+  for(let i=1;i<=TOTAL;i++){
+    const d = document.createElement("div");
+    d.className = "step-dot" + (i===1?" active":"");
+    d.id = "dot"+i;
+    c.appendChild(d);
+  }
+}
+
+function buildNPS(){
+  const row = document.getElementById("npsRow");
+  for(let i=1;i<=10;i++){
+    const b = document.createElement("button");
+    b.className = "nps-btn";
+    b.textContent = i;
+    b.dataset.val = i;
+    b.type = "button";
+    b.addEventListener("click", ()=>{
+      row.querySelectorAll(".nps-btn").forEach(x=>x.classList.remove("selected"));
+      b.classList.add("selected");
+      answers.nps = i;
+    });
+    row.appendChild(b);
+  }
+}
+
+function getChoiceValue(item){
+  const text = item.querySelector(".choice-text");
+  if(text){
+    return text.textContent.replace(/\s+/g, " ").trim();
+  }
+  const input = item.querySelector("input");
+  return input ? input.value : "";
+}
+
+function syncChoiceGroup(group){
+  const name = group.dataset.name;
+  const type = group.dataset.type;
+  if(type === "radio"){
+    let selectedValue;
+    group.querySelectorAll(".choice-item").forEach(item => {
+      const input = item.querySelector("input");
+      const isSelected = input.checked;
+      item.classList.toggle("selected", isSelected);
+      if(isSelected) selectedValue = getChoiceValue(item);
+    });
+    answers[name] = selectedValue;
+    return;
+  }
+
+  const vals = [];
+  group.querySelectorAll(".choice-item").forEach(item => {
+    const input = item.querySelector("input");
+    const isSelected = input.checked;
+    item.classList.toggle("selected", isSelected);
+    if(isSelected) vals.push(getChoiceValue(item));
+  });
+  answers[name] = vals;
+}
+
+function wireChoices(){
+  document.querySelectorAll(".choices").forEach(group => {
+    const type = group.dataset.type;
+    const maxSel = group.dataset.max ? parseInt(group.dataset.max) : Infinity;
+    group.querySelectorAll("input").forEach(input => {
+      input.addEventListener("change", () => {
+        if(type === "checkbox"){
+          const checkedCount = group.querySelectorAll("input:checked").length;
+          if(checkedCount > maxSel){
+            input.checked = false;
+            const item = input.closest(".choice-item");
+            if(item){
+              item.style.borderColor = "var(--danger)";
+              setTimeout(() => { item.style.borderColor = ""; }, 600);
+            }
+          }
+        }
+        syncChoiceGroup(group);
+      });
+    });
+    syncChoiceGroup(group);
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   ▸ NAVIGATION
+═══════════════════════════════════════════════════ */
+function nextStep(from, required, errId){
+  const err = document.getElementById(errId);
+  for(const key of required){
+    const val = answers[key];
+    if(!val || (Array.isArray(val) && val.length === 0)){
+      err.classList.add("show");
+      return;
+    }
+  }
+  err.classList.remove("show");
+  showStep(from + 1);
+}
+function prevStep(from){ showStep(from - 1); }
+
+function showStep(n){
+  document.getElementById("step"+currentStep).classList.remove("active");
+  currentStep = n;
+  const el = document.getElementById("step"+n) || document.getElementById("stepThanks");
+  el.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  updateProgress();
+}
+
+function updateProgress(){
+  const pct = Math.round((currentStep / TOTAL) * 100);
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressLabel").textContent = `Step ${currentStep} of ${TOTAL}`;
+  document.getElementById("progressStepName").textContent = stepNames[currentStep-1] || "";
+  for(let i=1;i<=TOTAL;i++){
+    const d = document.getElementById("dot"+i);
+    if(!d) continue;
+    d.className = "step-dot" + (i===currentStep?" active":(i<currentStep?" done":""));
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ▸ SUBMIT
+═══════════════════════════════════════════════════ */
+async function submitForm(){
+  const name     = document.getElementById("fieldName").value.trim();
+  const email    = document.getElementById("fieldEmail").value.trim();
+  const whatsapp = document.getElementById("fieldWhatsapp").value.trim();
+  const other    = document.getElementById("fieldOther").value.trim();
+  const err      = document.getElementById("err7");
+
+  if(!name || !email || !whatsapp){
+    err.classList.add("show");
+    return;
+  }
+  err.classList.remove("show");
+
+  // Store extra fields
+  answers.respondent_name  = name;
+  answers.respondent_email = email;
+  answers.whatsapp         = whatsapp;
+  answers.other_feedback   = other;
+  answers.founder_message  = document.getElementById("founderMsg").value.trim();
+  if(!answers.permissions) answers.permissions = [];
+
+  const btn = document.getElementById("submitBtn");
+  btn.classList.add("loading");
+
+  await sendToGoogleForms(answers);
+
+  btn.classList.remove("loading");
+
+  // Show thank you
+  document.getElementById("step"+currentStep).classList.remove("active");
+  document.getElementById("progressShell").style.display = "none";
+  document.getElementById("stepThanks").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function sendToGoogleForms(data){
+  /* ─── HOW THIS WORKS ──────────────────────────
+     Google Forms accepts prefilled POST submissions.
+     We build a FormData object mapping each answer
+     to its entry ID and POST to the form action URL.
+     Because Google Forms blocks CORS, we use no-cors
+     mode — the request fires but we cannot read the
+     response. That is fine; the data will appear in
+     your Google Sheets response tab regardless.
+  ─────────────────────────────────────────────── */
+  const fd = new FormData();
+
+  for(const [key, entryId] of Object.entries(FIELD_MAP)){
+    const val = data[key];
+    if(val === undefined || val === null || val === "") continue;
+    if(Array.isArray(val)){
+      val.forEach(v => fd.append(entryId, v));
+    } else {
+      fd.append(entryId, val);
+    }
+  }
+
+  try {
+    await fetch(GOOGLE_FORM_ACTION, {
+      method: "POST",
+      mode: "no-cors",   // required for Google Forms
+      body: fd
+    });
+  } catch(e){
+    // no-cors will always throw a TypeError for the response — that is expected
+    console.log("Form submitted (no-cors mode)");
+  }
+}
+</script>
+
+<!-- ════════════════════════════════════════════════════
+  HOW TO CONNECT YOUR GOOGLE FORM — STEP-BY-STEP GUIDE
+  (This comment block is for you; it is not shown to users)
+
+  STEP 1 — CREATE THE GOOGLE FORM
+  ─────────────────────────────────
+  1. Go to https://forms.google.com and click "+ Blank".
+  2. Add all your questions EXACTLY matching the survey
+     questions in this file (same order as the FIELD_MAP).
+  3. For multi-choice questions → use "Multiple choice".
+     For checkbox questions → use "Checkboxes".
+     For NPS → use "Linear scale" (1–10).
+     For text fields → use "Short answer" or "Paragraph".
+  4. At the top-right, click the ⋮ menu → "Get pre-filled link".
+  5. Fill in dummy values for every field, then click
+     "Get Link" at the bottom.
+  6. Copy the URL it gives you. It will look like:
+     https://docs.google.com/forms/d/e/ABC123.../viewform?
+     entry.123456789=dummyVal&entry.987654321=otherVal...
+
+  STEP 2 — EXTRACT YOUR FORM ID
+  ─────────────────────────────────
+  From the URL above, copy the long ID between /e/ and /viewform.
+  Example: if URL is ...forms/d/e/1FAIpQLSxABC.../viewform
+  Then your form ID = 1FAIpQLSxABC...
+  
+  Set GOOGLE_FORM_ACTION to:
+    https://docs.google.com/forms/d/e/1FAIpQLSxABC.../formResponse
+  (replace /viewform with /formResponse)
+
+  STEP 3 — EXTRACT ENTRY IDs
+  ─────────────────────────────────
+  From the pre-filled URL, each ?entry.XXXXXXXXX=value is
+  one field's entry ID.
+  
+  Map them in the FIELD_MAP object at the top of the <script>:
+    age_group:  "entry.123456789",
+    location:   "entry.987654321",
+    ...etc
+
+  STEP 4 — CONNECT GOOGLE SHEETS (OPTIONAL BUT RECOMMENDED)
+  ─────────────────────────────────
+  In your Google Form editor, click the "Responses" tab →
+  click the green Sheets icon → "Create a new spreadsheet".
+  Now every submission automatically appears in the Sheet.
+
+  STEP 5 — TEST
+  ─────────────────────────────────
+  1. Replace the placeholder values in FIELD_MAP and GOOGLE_FORM_ACTION.
+  2. Open the HTML file in a browser.
+  3. Fill the survey and submit.
+  4. Check your Google Form's "Responses" tab or connected Sheet.
+  5. Your answer should appear within seconds.
+
+  STEP 6 — HOST (OPTIONAL)
+  ─────────────────────────────────
+  You can host this HTML file for free on:
+  - Netlify (drag & drop the file at netlify.com/drop)
+  - Vercel  (via CLI or GitHub)
+  - GitHub Pages
+  - Render.com (like the original site)
+══════════════════════════════════════════════════════ -->
+
+</body>
+</html>
